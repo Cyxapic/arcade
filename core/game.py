@@ -1,6 +1,7 @@
 import pygame
 
 from core import parts
+from core.parts import create_part
 from .player import Player
 
 
@@ -30,10 +31,10 @@ class Game(metaclass=Singleton):
 
     def _get_states(self):
         def path_(name): return f'resourses/{name}'
-        menu = parts.Menu(self.screen, path_('menu.png'))
-        level = parts.GameLevel(self.screen, self.player)
-        end_lvl = parts.EndLevel(self.screen, path_('win.png'), player=self.player)
-        gameover = parts.GameOver(self.screen, path_('gameover.png'))
+        menu = create_part('menu', self.screen, path_('menu.png'))
+        level = create_part('level', self.screen, self.player)
+        end_lvl = create_part('end_lvl', self.screen, path_('win.png'), player=self.player)
+        gameover = create_part('gameover', self.screen, path_('gameover.png'))
         return {
             'menu': menu.run,
             'gen_lvl': level.start_level,
