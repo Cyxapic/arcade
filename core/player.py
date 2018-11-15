@@ -82,14 +82,14 @@ class Player:
 
     def check_boundaries(self, size: tuple):
         width, height = size
-        if self.rect.x < 0:
-            self.rect.x = 0
-        if self.rect.x + self.rect.width > width:
-            self.rect.x = width - self.rect.width
-        if self.rect.y < 0:
-            self.rect.y = 0
-        if self.rect.y + self.rect.height > height:
-            self.rect.y = height - self.rect.height
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > width:
+            self.rect.right = width
+        if self.rect.top < 0:
+            self.rect.top = 0
+        if self.rect.bottom > height:
+            self.rect.bottom = height
 
     def reset(self):
         self._score = 0
