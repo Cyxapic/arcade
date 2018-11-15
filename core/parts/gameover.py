@@ -1,8 +1,8 @@
-from .miniature import Miniature
-from .messages import Message
+from .commons import miniature
+from .commons import message
 
 
-class GameOver(Miniature):
+class GameOver(miniature):
     """Class render and draw Game Over screenS
         Arguments:
             screen -- Main diesplay surface
@@ -10,6 +10,6 @@ class GameOver(Miniature):
     def _create_titles(self):
         x = self.width // 2
         y = 400
-        title = Message(x, y, '*** ФУУУУУУУ ***', 45)
-        sub_title = Message(x, y+100, f'*** Весь в какашках!!! ***', 35)
+        title = message(x, y, '*** ФУУУУУУУ ***', 45)
+        sub_title = message(x, y+100, f'*** Весь в какашках!!! ***', 35)
         return title.render(), sub_title.render()

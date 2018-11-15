@@ -8,7 +8,6 @@ class Enemy(Entity):
     start = 0
     direction = 1
     change_dir = True
-    file = 'resourses/kakashka.png'
 
     def _animate(self):
         """Moves Entity foward and backward"""

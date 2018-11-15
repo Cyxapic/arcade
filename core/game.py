@@ -1,7 +1,6 @@
 import pygame
 
-from core import parts
-from core.parts import create_part
+from .states import GameState
 from .player import Player
 
 
@@ -27,21 +26,7 @@ class Game(metaclass=Singleton):
     def __init__(self, screen):
         self.screen = screen
         self.width, self.height = screen.get_size()
-        self.STATES = self._get_states()
-
-    def _get_states(self):
-        def path_(name): return f'resourses/{name}'
-        menu = create_part('menu', self.screen, path_('menu.png'))
-        level = create_part('level', self.screen, self.player)
-        end_lvl = create_part('end_lvl', self.screen, path_('win.png'), player=self.player)
-        gameover = create_part('gameover', self.screen, path_('gameover.png'))
-        return {
-            'menu': menu.run,
-            'gen_lvl': level.start_level,
-            'level': level.run,
-            'end_lvl': end_lvl.run,
-            'gameover': gameover.run,
-        }
+        self.STATES = GameState(self.screen, self.player)()
 
     def _events(self):
         for event in pygame.event.get():
@@ -55,7 +40,7 @@ class Game(metaclass=Singleton):
                     if pygame.key.name(event.key) == 'escape':
                         self.state = 'menu'
 
-    def run(self, pressed):
+    def run(self):
         """ Entry point of Game"""
         self._events()
         state = self.STATES.get(self.state)()

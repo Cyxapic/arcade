@@ -10,10 +10,11 @@ ENTITYES = {
         }
 
 
-def create_entity(cls: str, size: tuple, quantity=None):
+def create_entity(cls: str, file: str, size: tuple, quantity=None):
     """Fabric method for Entity create
         Arguments:
             cls -- str > Name of entity class
+            file -- str (path to sprite file)
             size -- tuple > (screen_width, screen_heigth)
         Keyword arguments:
             quantity -- int > quantity of entityes
@@ -23,8 +24,8 @@ def create_entity(cls: str, size: tuple, quantity=None):
     if not entity:
         raise AssertionError(f'Bad cls {cls}')
     if not quantity:
-        return entity(size)
+        return entity(file, size)
     entity_group = sprite.Group()
-    entity_list = (entity(size) for _ in range(quantity))
+    entity_list = (entity(file, size) for _ in range(quantity))
     entity_group.add(entity_list)
     return entity_group

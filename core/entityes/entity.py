@@ -1,4 +1,4 @@
-from random import randint, choice
+from random import randint
 
 from pygame import sprite, image
 
@@ -6,18 +6,17 @@ from pygame import sprite, image
 class Entity(sprite.Sprite):
     """ Entityes in game
         Arguments:
-            size -- tuple(screen_width, screen_heght)
+            file -- str (path to sprite file)
+            size -- tuple (screen_width, screen_heght)
     """
-    file = None
-
-    def __init__(self, size: tuple):
+    def __init__(self, file: str, size: tuple):
         sprite.Sprite.__init__(self)
         self.size = size
-        self._load_image()
+        self._load_image(file)
         self._coords()
 
-    def _load_image(self):
-        self.image = image.load(self.file)
+    def _load_image(self, file):
+        self.image = image.load(f'resourses/{file}')
         self.rect = self.image.get_rect()
 
     def _coords(self):

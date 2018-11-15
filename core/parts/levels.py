@@ -3,7 +3,7 @@ from random import randint
 import pygame
 
 from core.entityes import create_entity
-from .messages import Message
+from .commons import message
 
 
 class GameLevel:
@@ -32,15 +32,25 @@ class GameLevel:
     def _level_init(self):
         """start new stage"""
         self.player.reset()
-        self.msg_scores = Message(100, 20, f'Очки: 0', 35)
-        self.msg_lives = Message(300, 20, f'Жизни: 3', 35)
+        self.msg_scores = message(100, 20, f'Очки: 0', 35)
+        self.msg_lives = message(300, 20, f'Жизни: 3', 35)
         self.enemy_quantity = randint(5, 20)
         self.fruit_quantity = randint(5, 20)
         # generate entityes
-        self.shit_list = create_entity('enemy', self.size, self.enemy_quantity)
-        self.fruits_list = create_entity('goodstaff', self.size, self.fruit_quantity)
+        self.shit_list = create_entity(
+            'enemy',
+            'kakashka.png',
+            self.size,
+            quantity=self.enemy_quantity
+        )
+        self.fruits_list = create_entity(
+            'goodstaff',
+            'good_staff.png',
+            self.size,
+            quantity=self.fruit_quantity
+        )
         # DEBUG OUTPUT QUANTITY OF FRUIT***********************************************
-        self._fruit_quantity = Message(550, 20, f'Всего фруктов: {self.fruit_quantity}', 35)
+        self._fruit_quantity = message(550, 20, f'Всего фруктов: {self.fruit_quantity}', 35)
         # *****************************************************************************
 
     def _render_entity(self, *entity_lists):
