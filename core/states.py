@@ -1,3 +1,5 @@
+import pygame
+
 from core.parts import create_part
 
 
@@ -7,12 +9,14 @@ class GameState:
             screen -- Main Surface screen
             player -- Player object
     """
+    event = None
+
     def __init__(self, screen, player):
         self.screen = screen
         self._player = player
         self._create_states()
 
-    def __call__(self):
+    def get_states(self):
         return {
             'menu': self._menu,
             'gen_lvl': self._gen_lvl,
@@ -29,16 +33,30 @@ class GameState:
         self.gameover_part = create_part('gameover', self.screen, path_('gameover.png'))
 
     def _menu(self):
+        if self.event and pygame.key.name(self.event.key) == 'escape':
+            exit()
         return self.menu_part.run()
 
     def _gen_lvl(self):
         return self.level_part.start_level()
 
     def _level(self):
-        return self.level_part.run()
+        menu = self._to_menu()
+        return menu if menu else self.level_part.run()
 
     def _end_lvl(self):
-        return self.end_lvl_part.run(self._player.get_score)
+        menu = self._to_menu()
+        return menu if menu else self.end_lvl_part.run(self._player.get_score)
 
     def _gameover(self):
-        return self.gameover_part.run()
+        menu = self._to_menu()
+        return menu if menu else self.gameover_part.run()
+
+    def _to_menu(self):
+        if self.event and pygame.key.name(self.event.key) == 'escape':
+            self.event = None
+            return 'menu'
+
+    def get_event(self, event):
+        """ event - pygame.event object """
+        self.event = event

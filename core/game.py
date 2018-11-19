@@ -26,19 +26,15 @@ class Game(metaclass=Singleton):
     def __init__(self, screen):
         self.screen = screen
         self.width, self.height = screen.get_size()
-        self.STATES = GameState(self.screen, self.player)()
+        self.game_states = GameState(self.screen, self.player)
+        self.STATES = self.game_states.get_states()
 
     def _events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit()
             if event.type == pygame.KEYDOWN:
-                if self.state == 'menu':
-                    if pygame.key.name(event.key) == 'escape':
-                        exit()
-                if self.state in ('end_lvl', 'gameover', 'level'):
-                    if pygame.key.name(event.key) == 'escape':
-                        self.state = 'menu'
+                self.game_states.get_event(event)
 
     def run(self):
         """ Entry point of Game"""
