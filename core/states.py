@@ -16,7 +16,7 @@ class GameState:
         self._player = player
         self._create_states()
 
-    def get_states(self):
+    def __call__(self):
         return {
             'menu': self._menu,
             'gen_lvl': self._gen_lvl,
@@ -56,6 +56,9 @@ class GameState:
         if self.event and pygame.key.name(self.event.key) == 'escape':
             self.event = None
             return 'menu'
+
+    def get_start(self):
+        return 'menu'
 
     def get_event(self, event):
         """ event - pygame.event object """

@@ -20,14 +20,14 @@ class Game(metaclass=Singleton):
         Arguments:
             screen -- Main Surface screen
     """
-    state = 'menu'
     player = Player('resourses/hedgehoc.png')
 
     def __init__(self, screen):
         self.screen = screen
         self.width, self.height = screen.get_size()
         self.game_states = GameState(self.screen, self.player)
-        self.STATES = self.game_states.get_states()
+        self.state = self.game_states.get_start()
+        self.STATES = self.game_states()
 
     def _events(self):
         for event in pygame.event.get():
