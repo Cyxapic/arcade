@@ -1,6 +1,9 @@
 import pygame
 
 from core.parts import create_part
+from core.parts.commons import (go_menu_cmd,
+                                leave_game_cmd,
+                                game_start_mouse_cmd)
 
 
 class GameState:
@@ -33,29 +36,27 @@ class GameState:
         self.gameover_part = create_part('gameover', self.screen, path_('gameover.png'))
 
     def _menu(self):
-        if self.event and pygame.key.name(self.event.key) == 'escape':
-            exit()
-        return self.menu_part.run()
+        leave_game_cmd.execute(self.event)
+        self.menu_part.run()
+        return game_start_mouse_cmd.execute(self.event, self.menu_part.start_btn)
 
     def _gen_lvl(self):
         return self.level_part.start_level()
 
     def _level(self):
-        menu = self._to_menu()
+        menu = go_menu_cmd.execute(self.event)
+        self.event = None
         return menu if menu else self.level_part.run()
 
     def _end_lvl(self):
-        menu = self._to_menu()
+        menu = go_menu_cmd.execute(self.event)
+        self.event = None
         return menu if menu else self.end_lvl_part.run(self._player.get_score)
 
     def _gameover(self):
-        menu = self._to_menu()
+        menu = go_menu_cmd.execute(self.event)
+        self.event = None
         return menu if menu else self.gameover_part.run()
-
-    def _to_menu(self):
-        if self.event and pygame.key.name(self.event.key) == 'escape':
-            self.event = None
-            return 'menu'
 
     def get_start(self):
         return 'menu'

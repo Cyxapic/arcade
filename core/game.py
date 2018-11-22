@@ -33,8 +33,7 @@ class Game(metaclass=Singleton):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit()
-            if event.type == pygame.KEYDOWN:
-                self.game_states.get_event(event)
+            self.game_states.get_event(event)
 
     def run(self):
         """ Entry point of Game"""

@@ -31,8 +31,6 @@ class Menu(miniature):
         return self.start_btn.check_state(*coords, pressed)
 
     def run(self):
-        """Entry point"""
+        """ Entry point"""
         super().run()
         self.screen.blit(*self.start_btn.render())
-        if self._btn_pressed:
-            return 'gen_lvl'
