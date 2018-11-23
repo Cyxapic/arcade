@@ -2,6 +2,8 @@ from random import randint
 
 import pygame
 
+from core.settings import configurator
+
 from core.entityes import create_entity
 from core.parts.commons import message
 
@@ -16,27 +18,21 @@ class GameLevel:
     """
     fruit_quantity = 0
     enemy_quantity = 0
-    background = pygame.image.load('resourses/background.png')
-    background_rect = background.get_rect()
 
     def __init__(self, screen, player):
         self.screen = screen
         self._get_screen()
         self.player = player
         self.level_gen = LevelGenerator()
+        self.block_size = configurator.block_size
+        self.game_screen = pygame.Surface(configurator.get_screen())
 
     def _get_screen(self):
         width, height = self.screen.get_size()
-        self.game_screen = pygame.Surface((width, height-100))
-        self.game_rect = self.game_screen.get_rect()
-        self.game_rect.y = 100
-        self.size = self.game_screen.get_size()
+        self.size = (100, 900) # self.game_screen.get_size()
 
     def _level_init(self):
         """start new stage"""
-        # generate level from file
-        self.level = self.level_gen.get_level()
-
         self.player.reset()
         self.msg_scores = message(100, 65, f'Очки: 0', 25)
         self.msg_lives = message(300, 65, f'Жизни: 3', 25)
@@ -59,6 +55,15 @@ class GameLevel:
         self._fruit_quantity = message(550, 65, f'Всего фруктов: {self.fruit_quantity}', 25)
         # *****************************************************************************
 
+    def _render(self):
+        # !!!!!!!!!!! НЕ РАБОТАЕТ!!!!!!!!!!
+        # ЧТО ТО С КООРДИНАТАМИ!!!!!!!!!!!!
+        self.game_screen.fill((0,0,0))
+        # self.game_screen.blits(((block.image, block.rect) for s in self.level_gen.all_map))
+        for block in self.level_gen.all_map:
+            # self.game_screen.blit(block.image, block.rect)
+            self.game_screen.blit(block.image, pygame.Rect(randint(100, 900), randint(100, 900), 32, 32))
+
     def _render_entity(self, *entity_lists):
         for entity_list in entity_lists:
             self.game_screen.blits((entity.render() for entity in entity_list))
@@ -70,7 +75,8 @@ class GameLevel:
     def run(self):
         pressed = pygame.key.get_pressed()
         self.player.move(pressed)
-        self.player.check_boundaries(self.size)
+        # self.player.check_boundaries(self.size)
+        self.player.collide(self.level_gen.platforms)
         # shit_hit_list = pygame.sprite.spritecollide(self.player, self.shit_list, True)
         # if shit_hit_list:
         #     if self.player.shiteater:
@@ -89,9 +95,11 @@ class GameLevel:
                 self._fruit_quantity.render()
             )
         # RENDER!
-        self.screen.blit(self.level, self.level.get_rect())
-        # self.game_screen.blit(self.background, self.background_rect)
-        # self._render_entity(self.shit_list, self.fruits_list)
+        self._render()
+        self.game_screen.blits(labels)
         self.game_screen.blit(*self.player.render())
-        self.screen.blits(labels)
-        # self.screen.blit(self.game_screen, self.game_rect)
+        # self.screen.blit(self.level, self.level.get_rect())
+        
+        # self._render_entity(self.shit_list, self.fruits_list)
+        
+        self.screen.blit(self.game_screen, self.game_screen.get_rect())

@@ -26,7 +26,7 @@ class Player:
         self._sound_init()
 
     def _get_rect(self):
-        return pygame.Rect(0, 0, 60, 80)
+        return pygame.Rect(100, 260, 60, 80)
 
     def _get_frames(self):
         """Create frames from sprites image"""
@@ -79,18 +79,19 @@ class Player:
 
     def render(self):
         return (self._player, self.rect)
+    
     # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    def collide(self, xvel, yvel, platforms):
+    def collide(self, platforms):
         for p in platforms:
             if pygame.sprite.collide_rect(self, p):
-                if isinstance(p, ExitBlock):
-                    pygame.event.post(pygame.event.Event(pygame.QUIT))
-                if xvel > 0: self.rect.right = p.rect.left
-                if xvel < 0: self.rect.left = p.rect.right
-                if yvel > 0:
+                print('COLLIDE!!!!!')
+                if self.rect.left > 0:
+                    self.rect.right = p.rect.left
+                if self.rect.left < 0:
+                    self.rect.left = p.rect.right
+                if self.rect.bottom > 0:
                     self.rect.bottom = p.rect.top
-                    self.onGround = True
-                if yvel < 0:
+                if self.rect.top < 0:
                     self.rect.top = p.rect.bottom
 
     def check_boundaries(self, size: tuple):
@@ -109,5 +110,5 @@ class Player:
         self._lives = 3
         self.current_frame = 0
         self._player = self.frames[self.current_frame]
-        self.rect.x = 0
-        self.rect.y = 0
+        self.rect.x = 100
+        self.rect.y = 260

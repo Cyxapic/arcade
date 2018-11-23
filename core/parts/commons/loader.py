@@ -1,23 +1,51 @@
-from pygame import image, Rect, Surface
+from pygame import image, Rect, sprite
 
 from core.settings import configurator
 
 
-def resourse_loader():
+class MBlock(sprite.Sprite):
+
     block_size = configurator.block_size
-    sprites = image.load('resourses/blocks.png')
-    blocks = ('M', '*', 'B', '#', )
-    BLOCKS = {}
-    xi = 0
-    for block in blocks:
-        x = -xi * block_size[0]
-        rect = Rect(x, 0, *block_size)
-        staff = Surface(block_size)
-        staff.blit(sprites, rect)
-        BLOCKS[block] = staff
-        xi += 1
 
-    return BLOCKS
+    def __init__(self):
+        sprite.Sprite.__init__(self)
+        self.image = image.load('resourses/m_block.png')
+        self.rect = Rect(0, 0, *self.block_size)
 
 
-resourses = resourse_loader()
+class StarBlock(sprite.Sprite):
+
+    block_size = configurator.block_size
+
+    def __init__(self):
+        sprite.Sprite.__init__(self)
+        self.image = image.load('resourses/s_block.png')
+        self.rect = Rect(0, 0, *self.block_size)
+
+
+class BBlock(sprite.Sprite):
+
+    block_size = configurator.block_size
+
+    def __init__(self):
+        sprite.Sprite.__init__(self)
+        self.image = image.load('resourses/b_block.png')
+        self.rect = Rect(0, 0, *self.block_size)
+
+
+class SharpBlock(sprite.Sprite):
+
+    block_size = configurator.block_size
+
+    def __init__(self):
+        sprite.Sprite.__init__(self)
+        self.image = image.load('resourses/sh_block.png')
+        self.rect = Rect(0, 0, *self.block_size)
+
+
+resourses = {
+        'M': MBlock(),
+        '*': StarBlock(),
+        'B': BBlock(),
+        '#': SharpBlock(), 
+    }
