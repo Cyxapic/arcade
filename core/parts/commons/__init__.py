@@ -8,6 +8,6 @@ miniature = Miniature
 message = Message
 button = Button
 
-game_start_mouse_cmd = GameStartMouseCmd('gen_lvl')
+game_start_cmd = GameStartMouseCmd('gen_lvl')
 go_menu_cmd = GoMenuCmd('menu')
 leave_game_cmd = LeaveGameCmd('menu')

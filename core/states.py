@@ -1,9 +1,7 @@
-import pygame
-
 from core.parts import create_part
 from core.parts.commons import (go_menu_cmd,
                                 leave_game_cmd,
-                                game_start_mouse_cmd)
+                                game_start_cmd)
 
 
 class GameState:
@@ -17,9 +15,18 @@ class GameState:
     def __init__(self, screen, player):
         self.screen = screen
         self._player = player
-        self._create_states()
+        self.states = self._create_states()
 
-    def __call__(self):
+    def __call__(self, state):
+        if state:
+            return self.states[state]
+
+    def _create_states(self):
+        def path_(name): return f'resourses/{name}'
+        self.menu_part = create_part('menu', self.screen, path_('menu.png'))
+        self.level_part = create_part('level', self.screen, self._player)
+        self.end_lvl_part = create_part('end_lvl', self.screen, path_('win.png'))
+        self.gameover_part = create_part('gameover', self.screen, path_('gameover.png'))
         return {
             'menu': self._menu,
             'gen_lvl': self._gen_lvl,
@@ -28,17 +35,10 @@ class GameState:
             'gameover': self._gameover,
         }
 
-    def _create_states(self):
-        def path_(name): return f'resourses/{name}'
-        self.menu_part = create_part('menu', self.screen, path_('menu.png'))
-        self.level_part = create_part('level', self.screen, self._player)
-        self.end_lvl_part = create_part('end_lvl', self.screen, path_('win.png'))
-        self.gameover_part = create_part('gameover', self.screen, path_('gameover.png'))
-
     def _menu(self):
         leave_game_cmd.execute(self.event)
         self.menu_part.run()
-        return game_start_mouse_cmd.execute(self.event, self.menu_part.start_btn)
+        return game_start_cmd.execute(self.event, self.menu_part.start_btn)
 
     def _gen_lvl(self):
         return self.level_part.start_level()

@@ -1,8 +1,10 @@
 import pygame
 
 from core.game import Game
+from core.settings import configurator
 
-SIZE = 1200, 900
+
+SIZE = configurator.get_screen()
 BLACK = 0, 0, 0
 sound = 'resourses/little_Hedgehog.mp3'
 icon = 'resourses/icon.png'
@@ -20,7 +22,7 @@ game = Game(screen)
 
 pygame.mixer.music.load(sound)
 pygame.mixer.music.set_volume(0.5)
-pygame.mixer.music.play(-1)
+# pygame.mixer.music.play(-1)
 
 clock = pygame.time.Clock()
 

@@ -27,7 +27,6 @@ class Game(metaclass=Singleton):
         self.width, self.height = screen.get_size()
         self.game_states = GameState(self.screen, self.player)
         self.state = self.game_states.get_start()
-        self.STATES = self.game_states()
 
     def _events(self):
         for event in pygame.event.get():
@@ -38,7 +37,7 @@ class Game(metaclass=Singleton):
     def run(self):
         """ Entry point of Game"""
         self._events()
-        state = self.STATES.get(self.state)()
+        state = self.game_states(self.state)()
         if state:
             self.state = state
             state = None

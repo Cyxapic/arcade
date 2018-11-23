@@ -79,6 +79,19 @@ class Player:
 
     def render(self):
         return (self._player, self.rect)
+    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    def collide(self, xvel, yvel, platforms):
+        for p in platforms:
+            if pygame.sprite.collide_rect(self, p):
+                if isinstance(p, ExitBlock):
+                    pygame.event.post(pygame.event.Event(pygame.QUIT))
+                if xvel > 0: self.rect.right = p.rect.left
+                if xvel < 0: self.rect.left = p.rect.right
+                if yvel > 0:
+                    self.rect.bottom = p.rect.top
+                    self.onGround = True
+                if yvel < 0:
+                    self.rect.top = p.rect.bottom
 
     def check_boundaries(self, size: tuple):
         width, height = size

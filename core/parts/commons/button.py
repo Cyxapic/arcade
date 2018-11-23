@@ -8,7 +8,6 @@ class Button(sprite.Sprite):
             x -- int, destanation of message, always center
             y -- int, destanation of message
     """
-
     _state = 0
     max_state = 3
     _width = 400
@@ -21,8 +20,7 @@ class Button(sprite.Sprite):
         self._sprites = image.load(image_file)
         self._get_states()
         self.rect = Rect(0, 0, self._width, self._heigth)
-        self._x, self._y = x - self._width//2, y
-        self._coords()
+        self._coords(x, y)
 
     def _get_states(self):
         """Create states of button from sprites image"""
@@ -33,21 +31,20 @@ class Button(sprite.Sprite):
             _surface.blit(self._sprites, rect)
             self._btn_states.append(_surface)
 
-    def _coords(self):
-        self.rect.x, self.rect.y = self._x, self._y
+    def _coords(self, x, y):
+        self.rect.x, self.rect.y = x - self._width//2, y
 
     def check_state(self, x, y, pressed=False):
-        check = all(
-            (
-                x > self._x,
-                x < self._x + self._width,
-                y > self._y,
-                y < self._y + self._heigth,
-            )
+        check = (
+            x > self.rect.left and
+            x < self.rect.right and
+            y > self.rect.top and
+            y < self.rect.bottom
         )
         if check:
             self._state = 1
             if pressed:
+                self._state = 0
                 return True
         else:
             self._state = 0

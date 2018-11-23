@@ -17,8 +17,8 @@ class GameStartMouseCmd(CommandButtons):
         if event.type == pygame.MOUSEMOTION:
             btn.check_state(*coords)
         if event.type == pygame.MOUSEBUTTONDOWN:
-            btn.check_state(*coords, pressed=True)
-            return self.status
+            if btn.check_state(*coords, pressed=True):
+                return self.status
 
 
 class GoMenuCmd(CommandButtons):
