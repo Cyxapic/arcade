@@ -6,7 +6,7 @@ from core.settings import configurator
 
 SIZE = configurator.get_screen()
 BLACK = 0, 0, 0
-sound = 'resourses/little_Hedgehog.mp3'
+sound = 'resourses/sounds/little_Hedgehog.mp3'
 icon = 'resourses/icon.png'
 
 pygame.mixer.pre_init(44100, -16, 2, 2048)

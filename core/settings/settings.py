@@ -17,10 +17,7 @@ class GameSetup:
 
     @property
     def block_size(self):
-        return (
-            int(self.config['level']['block']),
-            int(self.config['level']['block'])
-        )
+        return int(self.config['level']['block'])
 
     def write_lvl(self, lvl):
         pass
