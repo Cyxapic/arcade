@@ -1,13 +1,11 @@
-from random import randint
-
 import pygame
 
 from core.settings import configurator
-
 from core.entityes import create_entity
 from core.parts.commons import message
 
-from .loader import CreateBlock
+from .generator import LevelCreator
+from .blocks import create_block
 
 
 class GameLevel:
@@ -16,63 +14,35 @@ class GameLevel:
             screen -- Main diesplay surface
             player -- Player object
     """
-    fruit_quantity = 0
+    fruit_quantity = 10
     enemy_quantity = 0
-    create_block = CreateBlock()
     _level_groups = None
 
     def __init__(self, screen, player):
         self.screen = screen
-        self._get_screen()
         self.player = player
-        self._level = configurator.get_lvl()
         self.block_size = configurator.block_size
         self.game_screen = pygame.Surface(configurator.get_screen())
 
-    def _get_screen(self):
-        width, height = self.screen.get_size()
-        self.size = (100, 900) # self.game_screen.get_size()
-
     def _level_init(self):
         """start new stage"""
-        self._render()
+        level = LevelCreator()
+        self._bground, self._lvl_map, self._staff = level.get_groups()
         self.player.reset()
         self.msg_scores = message(100, 65, f'Очки: {self.player.get_score}', 25)
-        self.msg_lives = message(300, 65, f'Жизни: 3', 25)
+        self.msg_lives = message(300, 65, f'Жизни: {self.player.get_lives}', 25)
+        # create blocks
+        self._blocks = create_block(self._lvl_map)
+        self._bg = create_block(self._bground)
         # generate entityes
-        self.fruits_list = create_entity('goodstaff', self._good_staff)
-        # self.enemy_quantity = randint(5, 20)
-        # self.fruit_quantity = randint(5, 20)
-        # generate entityes
-        # self.shit_list = create_entity(
-        #     'enemy',
-        #     'kakashka.png',
-        #     self.size,
-        #     quantity=self.enemy_quantity
-        # )
-        # self.fruits_list = create_entity(
-        #     'goodstaff',
-        #     'good_staff.png',
-        #     self.size,
-        #     quantity=self.fruit_quantity
-        # )
+        self.fruits_list = create_entity('goodstaff', self._staff)
+        self.fruit_quantity = len(self.fruits_list)
         # # DEBUG OUTPUT QUANTITY OF FRUIT***********************************************
-        # self._fruit_quantity = message(550, 65, f'Всего фруктов: {self.fruit_quantity}', 25)
+        self._fruit_quantity = message(550, 65, f'Всего фруктов: {self.fruit_quantity}', 25)
         # # *****************************************************************************
 
-    def _render(self):
-        x = 0
-        y = 0
-        for row in self._level:
-            for col in row:
-                self.create_block(col, x, y)
-                x += self.block_size
-            y += self.block_size
-            x = 0
-        self._background, self._level_map, self._good_staff = self.create_block.get_groups()
-
     def _draw_screen(self):
-        for group in (self._background, self._level_map, self.fruits_list):
+        for group in (self._bg, self._blocks, self.fruits_list):
             group.draw(self.game_screen)
 
     def start_level(self):
@@ -82,16 +52,21 @@ class GameLevel:
     def run(self):
         pressed = pygame.key.get_pressed()
         self.player.move(pressed)
-        self.player.collide(self._level_map)
+        self.player.collide(self._blocks)
         _good_hit = pygame.sprite.spritecollide(self.player,
                                                 self.fruits_list,
                                                 True)
         if _good_hit:
             self.player.eat_fruit()
+            self.msg_scores.update(f'Очки: {self.player.get_score}')
+
+        if self.player.get_score == self.fruit_quantity:
+            return 'new_lvl'
+
         labels = (
                 self.msg_scores.render(),
                 self.msg_lives.render(),
-                # self._fruit_quantity.render()
+                self._fruit_quantity.render()
             )
         # RENDER!
         self._draw_screen()

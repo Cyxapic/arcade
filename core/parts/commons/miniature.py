@@ -13,7 +13,6 @@ class Miniature(ABC):
         self.width, self.heigth = screen.get_size()
         self._img = image.load(image_file)
         self._get_rect()
-        self._titles = self._create_titles()
 
     def _get_rect(self):
         self._rect = self._img.get_rect()
@@ -29,4 +28,4 @@ class Miniature(ABC):
 
     def run(self):
         """Entry point method"""
-        self.screen.blits(((self._img, self._rect), *self._titles))
+        self.screen.blits(((self._img, self._rect), *self._create_titles()))

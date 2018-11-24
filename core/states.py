@@ -31,6 +31,7 @@ class GameState:
             'menu': self._menu,
             'gen_lvl': self._gen_lvl,
             'level': self._level,
+            'new_lvl': self._new_lvl,
             'end_lvl': self._end_lvl,
             'gameover': self._gameover,
         }
@@ -47,6 +48,9 @@ class GameState:
         menu = go_menu_cmd.execute(self.event)
         self.event = None
         return menu if menu else self.level_part.run()
+
+    def _new_lvl(self):
+        return self.end_lvl_part.new_level()
 
     def _end_lvl(self):
         menu = go_menu_cmd.execute(self.event)
