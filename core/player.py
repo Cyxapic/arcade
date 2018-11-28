@@ -16,10 +16,9 @@ class Player:
     max_frames = 4
     current_frame = 0
     speed = 10
-    LEFT = False
-    RIGHT = False
-    DOWN = False
-    UP = False
+    _event = None
+    _move = False
+    _direction = None
 
     def __init__(self, imgfile: str):
         self._player_sprite = pygame.image.load(imgfile)
@@ -54,35 +53,65 @@ class Player:
         self._player = self.frames[self.current_frame]
         self._player.set_colorkey((0, 255, 0))
 
+    def get_event(self, event):
+        self._event = event
+
     def move(self, pressed: tuple):
-        KEYS = {
-            pygame.K_LEFT: 'LEFT',
-            pygame.K_RIGHT: 'RIGHT',
-            pygame.K_DOWN: 'DOWN',
-            pygame.K_UP: 'UP',
+        KEYS_ = {
+            'left': (-self.speed, 0),
+            'right': (self.speed, 0),
+            'down': (0, self.speed),
+            'up': (0, -self.speed),
         }
-        direction = [val for key, val in KEYS.items() if pressed[key]]
-        direction = direction[0] if direction else None
-        if direction == 'LEFT':
-            move = (-self.speed, 0)
-            self.LEFT = True
-        elif direction == 'RIGHT':
-            self.RIGHT = True
-            move = (self.speed, 0)
-        elif direction == 'DOWN':
-            move = (0, self.speed)
-            self.DOWN = True
-        elif direction == 'UP':
-            move = (0, -self.speed)
-            self.UP = True
-        else:
-            move = None
-            self.LEFT = False
-            self.RIGHT = False
-            self.DOWN = False
-            self.UP = False
-        if move:
-            self.rect = self.rect.move(move)
+        if self._event:
+            if self._event.type == pygame.KEYDOWN:
+                self._direction = pygame.key.name(self._event.key)
+                if self._direction in KEYS_.keys():
+                    self._move = True
+            if self._event.type == pygame.KEYUP:
+                self._move = False
+                self._direction = None
+        if self._move:
+            self.rect = self.rect.move(*KEYS_[self._direction])
+
+    def collide(self, blocks):
+        # 'left': (-self.speed, 0),
+        # 'right': (self.speed, 0),
+        # 'down': (0, self.speed),
+        # 'up': (0, -self.speed),
+        for block in blocks:
+            if pygame.sprite.collide_rect(self, block) and self._move:
+                if self.rect.left < block.rect.right \
+                    and self._direction == 'left':
+                    print('left')
+                    self.rect = self.rect.move(self.speed, 0)
+                    self._move = False
+                    break
+                    # self.rect.left = block.rect.right
+                    
+                elif self.rect.right > block.rect.left \
+                        and self._direction == 'right':
+                    print('right')
+                    # self.rect = self.rect.move(-self.speed, 0)
+                    self.rect.right = block.rect.left
+                    self._move = False
+                    break
+                elif self.rect.bottom > block.rect.top \
+                        and self._direction == 'bottom':
+                    print('bottom')
+                    print(self._direction)
+                    # self.rect = self.rect.move(0, -self.speed)
+                    self.rect.bottom = block.rect.top
+                    self._move = False
+                    break
+                    # self._move = False
+                elif self.rect.top < block.rect.bottom \
+                        and self._direction == 'top':
+                    print('top')
+                    # self.rect = self.rect.move(0, self.speed)
+                    # self.rect.top = block.rect.bottom
+                    self._move = False
+                    break
 
     @property
     def shiteater(self):
@@ -102,18 +131,6 @@ class Player:
 
     def render(self):
         return (self._player, self.rect)
-
-    def collide(self, blocks):
-        for block in blocks:
-            if pygame.sprite.collide_rect(self, block):
-                if self.rect.bottom > block.rect.top and self.DOWN:
-                    self.rect.bottom = block.rect.top
-                elif self.rect.top < block.rect.bottom and self.UP:
-                    self.rect.top = block.rect.bottom
-                elif self.rect.left < block.rect.right and self.LEFT:
-                    self.rect.left = block.rect.right
-                elif self.rect.right > block.rect.left and self.RIGHT:
-                    self.rect.right = block.rect.left
 
     def reset(self):
         self._score = 0

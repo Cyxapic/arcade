@@ -3,6 +3,8 @@ from core.parts.commons import (go_menu_cmd,
                                 leave_game_cmd,
                                 game_start_cmd)
 
+from .player import Player
+
 
 class GameState:
     """ Game states for Game object
@@ -11,10 +13,10 @@ class GameState:
             player -- Player object
     """
     event = None
+    _player = Player('resourses/hedgehoc.png')
 
-    def __init__(self, screen, player):
+    def __init__(self, screen):
         self.screen = screen
-        self._player = player
         self.states = self._create_states()
 
     def __call__(self, state):
@@ -46,6 +48,7 @@ class GameState:
 
     def _level(self):
         menu = go_menu_cmd.execute(self.event)
+        self._player.get_event(self.event)
         self.event = None
         return menu if menu else self.level_part.run()
 

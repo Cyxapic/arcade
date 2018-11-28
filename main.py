@@ -27,7 +27,7 @@ pygame.mixer.music.play(-1)
 clock = pygame.time.Clock()
 
 while True:
-    clock.tick(60)
     screen.fill(BLACK)
     game.run()
     pygame.display.flip()
+    clock.tick(60)
