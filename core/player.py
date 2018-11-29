@@ -75,41 +75,26 @@ class Player:
             self.rect = self.rect.move(*KEYS_[self._direction])
 
     def collide(self, blocks):
-        # 'left': (-self.speed, 0),
-        # 'right': (self.speed, 0),
-        # 'down': (0, self.speed),
-        # 'up': (0, -self.speed),
         for block in blocks:
             if pygame.sprite.collide_rect(self, block) and self._move:
                 if self.rect.left < block.rect.right \
-                    and self._direction == 'left':
-                    print('left')
-                    self.rect = self.rect.move(self.speed, 0)
+                        and self._direction == 'left':
+                    self.rect.left = block.rect.right
                     self._move = False
                     break
-                    # self.rect.left = block.rect.right
-                    
                 elif self.rect.right > block.rect.left \
                         and self._direction == 'right':
-                    print('right')
-                    # self.rect = self.rect.move(-self.speed, 0)
                     self.rect.right = block.rect.left
                     self._move = False
                     break
                 elif self.rect.bottom > block.rect.top \
-                        and self._direction == 'bottom':
-                    print('bottom')
-                    print(self._direction)
-                    # self.rect = self.rect.move(0, -self.speed)
+                        and self._direction == 'down':
                     self.rect.bottom = block.rect.top
                     self._move = False
                     break
-                    # self._move = False
                 elif self.rect.top < block.rect.bottom \
-                        and self._direction == 'top':
-                    print('top')
-                    # self.rect = self.rect.move(0, self.speed)
-                    # self.rect.top = block.rect.bottom
+                        and self._direction == 'up':
+                    self.rect.top = block.rect.bottom
                     self._move = False
                     break
 
@@ -139,3 +124,4 @@ class Player:
         self._player = self.frames[self.current_frame]
         self.rect.x = 100
         self.rect.y = 260
+        self._move = False
