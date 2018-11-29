@@ -39,35 +39,42 @@ class GameState:
         }
 
     def _menu(self):
+        """ Запускаем меню"""
         leave_game_cmd.execute(self.event)
         self.menu_part.run()
         return game_start_cmd.execute(self.event, self.menu_part.start_btn)
 
     def _gen_lvl(self):
+        """ Создаем уровень"""
         return self.level_part.start_level()
 
     def _level(self):
+        """ Уровень"""
         menu = go_menu_cmd.execute(self.event)
         self._player.get_event(self.event)
         self.event = None
         return menu if menu else self.level_part.run()
 
     def _new_lvl(self):
+        """ Запись в новый уровень"""
         return self.end_lvl_part.new_level()
 
     def _end_lvl(self):
+        """ Новый уровень"""
         menu = go_menu_cmd.execute(self.event)
         self.event = None
         return menu if menu else self.end_lvl_part.run(self._player.get_score)
 
     def _gameover(self):
+        """ Проиграл"""
         menu = go_menu_cmd.execute(self.event)
         self.event = None
         return menu if menu else self.gameover_part.run()
 
     def get_start(self):
+        """ Отдаю начальный статус"""
         return 'menu'
 
     def get_event(self, event):
-        """ event - pygame.event object """
+        """ Получаю event - pygame.event object """
         self.event = event
