@@ -19,6 +19,10 @@ class Enemy(Entity):
         self.direction = -1 if self.change_dir else 1
         self.rect.x += self.direction * choice(steps)
 
-    def render(self):
+    def render(self, blocks):
+        for block in blocks:
+            if self.collide_rect(self, block):
+                self.change_dir = True
+
         self._animate()
         return (self.image, self.rect)

@@ -21,21 +21,22 @@ class GameLevel:
     def __init__(self, screen, player):
         self.screen = screen
         self.player = player
-        self.block_size = configurator.block_size
+        # self.block_size = configurator.block_size
         self.game_screen = pygame.Surface(configurator.get_screen())
 
     def _level_init(self):
         """start new stage"""
         level = LevelCreator()
-        self._bground, self._lvl_map, self._staff = level.get_groups()
+        _bground, _lvl_map, _staff, _enemy = level.get_groups()
         self.player.reset()
         self.msg_scores = message(100, 65, f'Очки: {self.player.get_score}', 25)
         self.msg_lives = message(300, 65, f'Жизни: {self.player.get_lives}', 25)
         # create blocks
-        self._blocks = create_block(self._lvl_map)
-        self._bg = create_block(self._bground)
+        self._blocks = create_block(_lvl_map)
+        self._bg = create_block(_bground)
         # generate entityes
-        self.fruits_list = create_entity('goodstaff', self._staff)
+        self.fruits_list = create_entity('goodstaff', _staff)
+        self.enemy_list = create_entity('enemy', _enemy)
         self.fruit_quantity = len(self.fruits_list)
         # # DEBUG OUTPUT QUANTITY OF FRUIT***********************************************
         self._fruit_quantity = message(550, 65, f'Всего фруктов: {self.fruit_quantity}', 25)
@@ -60,8 +61,17 @@ class GameLevel:
             self.player.eat_fruit()
             self.msg_scores.update(f'Очки: {self.player.get_score}')
 
+        _enemy_hit = pygame.sprite.spritecollide(self.player,
+                                                 self.enemy_list,
+                                                 True)
+        if _enemy_hit:
+            self.player.crash()
+            self.msg_lives.update(f'Жизни: {self.player.get_lives}')
+
         if self.player.get_score == self.fruit_quantity:
             return 'new_lvl'
+        if self.player.get_lives == 0:
+            return 'gameover'
 
         labels = (
                 self.msg_scores.render(),
@@ -71,6 +81,8 @@ class GameLevel:
         # RENDER!
         self._draw_screen()
         self.game_screen.blits(labels)
+        for enemy in self.enemy_list:
+            self.game_screen.blit(*enemy.render(self._blocks))
         self.game_screen.blit(*self.player.render())
         # On main screen
         self.screen.blit(self.game_screen, self.game_screen.get_rect())

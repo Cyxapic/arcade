@@ -1,5 +1,5 @@
 from core.settings import configurator
-from core.entityes import goodstaff
+from core.entityes import goodstaff, enemy
 from .blocks import lvl_blocks, bg_blocks
 
 
@@ -11,11 +11,13 @@ class LevelCreator:
         self._BLOCKS = {
             lvl_blocks.get_types: self._lvl_block,
             goodstaff.get_types: self._good_staff,
+            enemy.get_types: self._enemies,
             bg_blocks.get_types: self._backg_round,
         }
         self._background = []
         self._level_map = []
         self._good_list = []
+        self._enemy_list = []
         self._calc()
 
     def _add_block(self,  block, x, y):
@@ -59,11 +61,15 @@ class LevelCreator:
         return True
 
     def _enemies(self):
-        pass
+        images = enemy.get_types_img
+        self._backg_round()
+        self._enemy_list.append((self._x, self._y, images[self._block]))
+        return True
 
     def get_groups(self):
         return (
             self._background,
             self._level_map,
             self._good_list,
+            self._enemy_list,
         )

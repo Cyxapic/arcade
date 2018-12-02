@@ -99,10 +99,6 @@ class Player:
                     break
 
     @property
-    def shiteater(self):
-        return True if self._lives == 0 else False
-
-    @property
     def get_score(self):
         return self._score
 

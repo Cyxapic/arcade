@@ -13,6 +13,7 @@ class Entity(sprite.Sprite):
         self._load_image(file)
         self.rect.x, self.rect.y = x, y
         self.start_x, self.start_y = x, y
+        self.collide_rect = sprite.collide_rect
 
     def _load_image(self, file):
         self.image = image.load(f'resourses/{file}')

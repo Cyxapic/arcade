@@ -13,7 +13,7 @@ class EndLevel(miniature):
             player -- player object
     """
     _score = None
-    end_title = 'That\' all!'
+    end_title = 'Вот и все - все пройдено!'
 
     def _create_titles(self):
         x = self.width // 2
@@ -30,7 +30,7 @@ class EndLevel(miniature):
         level_file = f'resourses/levels/level_{number}.lvl'
         if os.path.exists(level_file):
             configurator.set_lvl(number)
-            self.end_title = f'Go to the next level {number}'
+            self.end_title = f'Идем в следующий уровень {number}!'
         return 'end_lvl'
 
     def run(self, score):
