@@ -7,6 +7,7 @@ class Entity(sprite.Sprite):
             file -- str (path to sprite file)
             size -- tuple (screen_width, screen_heght)
     """
+
     def __init__(self, x: int, y: int, file: str):
         sprite.Sprite.__init__(self)
         self._load_image(file)

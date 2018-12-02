@@ -1,6 +1,21 @@
 from pygame import image, Rect, sprite
 
 from core.settings import configurator
+from core.commons.types import TileTypes
+
+
+lvl_blocks = TileTypes({
+    'U': 'u_block.png',
+    'B': 'b_block.png',
+    '*': 's_block.png',
+})
+
+bg_blocks = TileTypes({
+   '#': 'sh_block.png',
+   'G': 'g_block.png',
+   'T': 't_block.png',
+   'F': 'f_block.png',
+})
 
 
 class Block(sprite.Sprite):

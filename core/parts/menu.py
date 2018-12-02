@@ -1,8 +1,8 @@
 from pygame import mouse
 
-from .commons import miniature
-from .commons import message
-from .commons import button
+from core.commons import miniature
+from core.commons import message
+from core.commons import button
 
 
 class Menu(miniature):

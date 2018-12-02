@@ -2,7 +2,7 @@ import pygame
 
 from core.settings import configurator
 from core.entityes import create_entity
-from core.parts.commons import message
+from core.commons import message
 
 from .generator import LevelCreator
 from .blocks import create_block

@@ -1,5 +1,5 @@
-from .commons import miniature
-from .commons import message
+from core.commons import miniature
+from core.commons import message
 
 
 class GameOver(miniature):

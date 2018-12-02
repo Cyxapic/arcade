@@ -1,7 +1,7 @@
 from core.parts import create_part
-from core.parts.commons import (go_menu_cmd,
-                                leave_game_cmd,
-                                game_start_cmd)
+from core.commons import (go_menu_cmd,
+                          leave_game_cmd,
+                          game_start_cmd)
 
 from .player import Player
 

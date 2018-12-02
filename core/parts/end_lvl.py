@@ -2,8 +2,8 @@ import os
 
 from core.settings import configurator
 
-from .commons import miniature
-from .commons import message
+from core.commons import miniature
+from core.commons import message
 
 
 class EndLevel(miniature):

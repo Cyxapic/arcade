@@ -1,4 +1,6 @@
 from core.settings import configurator
+from core.entityes import goodstaff
+from .blocks import lvl_blocks, bg_blocks
 
 
 class LevelCreator:
@@ -7,9 +9,9 @@ class LevelCreator:
 
     def __init__(self):
         self._BLOCKS = {
-            ('M', 'B', '*'): self._lvl_block,
-            ('A', 'O'): self._good_staff,
-            ('#', ): self._backg_round,
+            lvl_blocks.get_types: self._lvl_block,
+            goodstaff.get_types: self._good_staff,
+            bg_blocks.get_types: self._backg_round,
         }
         self._background = []
         self._level_map = []
@@ -17,7 +19,7 @@ class LevelCreator:
         self._calc()
 
     def _add_block(self,  block, x, y):
-        self._block = '#' if block == chr(32) else block
+        self._block = block
         self._x, self._y = x, y
         for bl, func in self._BLOCKS.items():
             if self._block in bl:
@@ -39,23 +41,19 @@ class LevelCreator:
             x = 0
 
     def _backg_round(self):
-        self._background.append((self._x, self._y, 'sh_block.png'))
+        images = bg_blocks.get_types_img
+        image = images.get(self._block)
+        image = image if image else images.get('#')
+        self._background.append((self._x, self._y, image))
         return True
 
     def _lvl_block(self):
-        images = {
-            'M': 'm_block.png',
-            'B': 'b_block.png',
-            '*': 's_block.png',
-        }
+        images = lvl_blocks.get_types_img
         self._level_map.append((self._x, self._y, images[self._block]))
         return True
 
     def _good_staff(self):
-        images = {
-            'A': 'apple.png',
-            'O': 'orange.png',
-        }
+        images = goodstaff.get_types_img
         self._backg_round()
         self._good_list.append((self._x, self._y, images[self._block]))
         return True
