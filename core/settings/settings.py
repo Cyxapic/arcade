@@ -35,6 +35,10 @@ class GameSetup:
     def block_size(self):
         return int(self.config['level']['block'])
 
+    @property
+    def db_name(self):
+        return self.config['db']['name']
+
     def set_lvl(self, number):
         self.config.set("level", "number", str(number))
         with open(self.file, 'w') as fp:

@@ -19,9 +19,13 @@ class Player:
     _event = None
     _move = False
     _direction = None
+    # for DB test TODO methods get_level/set_level
+    level = 1
+    name = None
 
-    def __init__(self, imgfile: str):
+    def __init__(self, imgfile: str, name='Noname'):
         self._player_sprite = pygame.image.load(imgfile)
+        self.name = name
         self.rect = self._get_rect()
         self._get_frames()
         self._player = self.frames[self.current_frame]
