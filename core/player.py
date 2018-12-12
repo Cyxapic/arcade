@@ -23,9 +23,9 @@ class Player:
     level = 1
     name = None
 
-    def __init__(self, imgfile: str, name='Noname'):
+    def __init__(self, imgfile: str):
         self._player_sprite = pygame.image.load(imgfile)
-        self.name = name
+        # self.name = name
         self.rect = self._get_rect()
         self._get_frames()
         self._player = self.frames[self.current_frame]
