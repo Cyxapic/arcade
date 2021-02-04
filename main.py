@@ -18,9 +18,13 @@ pygame.display.set_caption('Приключения ежика!')
 screen = pygame.display.set_mode(SIZE)
 game = Game(screen)
 
-pygame.mixer.music.load(sound)
-pygame.mixer.music.set_volume(0.5)
-pygame.mixer.music.play(-1)
+# BROKEN IN PYGAME 2 (((
+try:
+    pygame.mixer.music.load(sound)
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(-1)
+except Exception as error:
+    print(error)
 
 clock = pygame.time.Clock()
 
